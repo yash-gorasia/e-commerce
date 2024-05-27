@@ -68,7 +68,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutCurrentUser = asyncHandler(async (req, res) => {
-    res.cookie("token", "", { // Clear the cookie
+    res.cookie("JWT", "", { // Clear the cookie
         httpOnly: true,
         expires: new Date(0)
     });
