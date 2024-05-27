@@ -5,14 +5,14 @@ import generateToken from "../utils/createToken.js"; // Import the generateToken
 
 const createUser = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body; // Destructure the username, email, and password from req.body
-   
-    if( !username || !email || !password ) { // If username, email, or password is missing
+
+    if (!username || !email || !password) { // If username, email, or password is missing
         res.status(400); // Set the status code to 400
         throw new Error("Please fill in all fields"); // Throw an error
     };
 
     const userExists = await User.findOne({ email }); // Check if the user already exists
-    if(userExists) { // If the user already exists
+    if (userExists) { // If the user already exists
         res.status(400); // Set the status code to 400
         throw new Error("User already exists"); // Throw an error
     };
@@ -35,9 +35,36 @@ const createUser = asyncHandler(async (req, res) => {
             isAdmin: newUser.isAdmin
         });
     } catch (error) {
-        res.status(400); 
-        throw new Error("Invalid user data"); 
+        res.status(400);
+        throw new Error("Invalid user data");
     }
 });
 
-export { createUser }; // Export the createUser function
+
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body; // Destructure the email and password from req.body
+
+    const existingUser = await User.findOne({ email }); // Find the user by email
+
+    if (existingUser) {
+        const isPasswordValid = await bcrypt.compare(password, existingUser.password); // Compare the password
+
+        if (isPasswordValid) {
+            generateToken(res, existingUser._id); // Generate a token
+
+            res.status(200).json({ // Send a response
+                _id: existingUser._id,
+                username: existingUser.username,
+                email: existingUser.email,
+                isAdmin: existingUser.isAdmin
+            });
+            return; // we return to stop the function
+
+        }
+    }
+
+    res.status(401); // Set the status code to 401
+    throw new Error("Invalid email or password"); // Throw an error
+});
+
+export { createUser, loginUser }; // Export the createUser, loginUser function
