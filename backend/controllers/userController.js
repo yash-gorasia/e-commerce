@@ -40,7 +40,6 @@ const createUser = asyncHandler(async (req, res) => {
     }
 });
 
-
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body; // Destructure the email and password from req.body
 
@@ -81,4 +80,53 @@ const getAllUsers = asyncHandler(async (req, res) => {
     res.json(users); // Send a response
 });
 
-export { createUser, loginUser, logoutCurrentUser, getAllUsers }; // Export the createUser, loginUser function
+const getCurrentUserProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id); // Find the user by id
+    if (user) {
+        res.json({
+            id: user._id,
+            username: user.username,
+            email: user.email,
+        })
+    } else {
+        res.status(404);
+        throw new Error("User not found");
+    }
+});
+
+const updateCurrentUserProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id); // Find the user by id
+
+    if (user) {
+        user.username = req.body.username || user.username; // Update the username
+        user.email = req.body.email || user.email; // Update the email
+
+        if (req.body.password) {
+            const salt = await bcrypt.genSalt(10); // Generate a salt, it will add random characters to the password
+            const hashedPassword = await bcrypt.hash(req.body.password, salt); // Hash the password
+            user.password = hashedPassword; // Update the password
+        }
+
+
+        const updatedUser = await user.save(); // Save the updated user
+
+        res.json({
+            id: updatedUser._id,
+            username: updatedUser.username,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin
+        });
+    } else {
+        res.status(404);
+        throw new Error("User not found");
+    }
+});
+
+export {
+    createUser,
+    loginUser,
+    logoutCurrentUser,
+    getAllUsers,
+    getCurrentUserProfile,
+    updateCurrentUserProfile
+};
