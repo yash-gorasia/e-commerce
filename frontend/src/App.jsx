@@ -8,11 +8,13 @@ function App() {
 
   return (
     <>
+    <div>  
      <ToastContainer />
       <Navigation />
       <main className='py-3'>
         <Outlet />
       </main>
+      </div>
     </>
   )
 }
