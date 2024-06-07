@@ -45,7 +45,7 @@ const Login = () => {
         <div className="mr-[4rem] mt-[5rem]">
           <h1 className="text-2xl font-bold mb-4 text-black">Sign In</h1>
 
-          <form onSubmit={submitHandler} className="container w-[40rem]">
+          <form onSubmit={submitHandler} className="container w-[30rem]">
             <div className="my-[2rem]">
               <label
                 htmlFor="email"
@@ -106,7 +106,7 @@ const Login = () => {
         <img
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
           alt=""
-          className="h-[14rem] w-[49%] xl:block md:hidden sm:hidden rounded-lg"
+          className="h-[42rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
         />
       </section>
     </div>
