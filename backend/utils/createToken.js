@@ -9,7 +9,7 @@ const generateToken = (res,userId) => {
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         secure: process.env.NODE_ENV !== 'development',
-        sameSite: 'strict',
+        sameSite: 'strict', // Prevent CSRF attacks
     });
 
     return token;
