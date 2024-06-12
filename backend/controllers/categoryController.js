@@ -33,20 +33,20 @@ const updateCategory = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: 'Name is required' });
         }
 
-        const category = await Category.findById(categoryId);
+        const category = await Category.findById({ _id: categoryId });
 
         if (!category) {
             return res.status(404).json({ message: 'Category not found' });
         }
-
         category.name = name;
-        await category.save();
+        const updateCategory = await category.save();
 
-        res.json(category);
+
+        res.json(updateCategory);
 
     } catch (error) {
         console.log(error)
-        return res.status(400).json(error)
+        return res.status(500).json({ error: "internal server error" })
     }
 });
 
