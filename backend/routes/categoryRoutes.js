@@ -4,7 +4,8 @@ import {
     createCategory,
     updateCategory,
     deleteCategory,
-    getAllCategories
+    getAllCategories,
+    readCategory
 } from "../controllers/categoryController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -17,6 +18,8 @@ router.route('/:categoryId').put(authenticate, authorizeAdmin, updateCategory);
 
 router.route('/:categoryId').delete(authenticate, authorizeAdmin, deleteCategory);
 
-router.route('/categories').get(authenticate, authorizeAdmin, getAllCategories)
+router.route('/categories').get(authenticate, authorizeAdmin, getAllCategories);
+
+router.route('/:id').get(authenticate, authorizeAdmin, readCategory);
 
 export default router;
