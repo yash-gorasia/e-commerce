@@ -27,26 +27,22 @@ const createCategory = asyncHandler(async (req, res) => {
 const updateCategory = asyncHandler(async (req, res) => {
     try {
         const { name } = req.body;
+        console.log("name is: ", name)
         const { categoryId } = req.params;
 
-        if (!name) {
-            return res.status(400).json({ message: 'Name is required' });
-        }
-
-        const category = await Category.findById({ _id: categoryId });
+        const category = await Category.findOne({ _id: categoryId });
 
         if (!category) {
-            return res.status(404).json({ message: 'Category not found' });
+            return res.status(404).json({ error: "Category not found" });
         }
+
         category.name = name;
-        const updateCategory = await category.save();
 
-
-        res.json(updateCategory);
-
+        const updatedCategory = await category.save();
+        res.json(updatedCategory);
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({ error: "internal server error" })
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 

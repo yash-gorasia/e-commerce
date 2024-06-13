@@ -53,14 +53,12 @@ const CategoryList = () => {
         }
 
         try {
-            console.log(name);
             const result = await updateCategory({
                 categoryId: selectedCategory._id,
                 updatedCategory: {
                     name: updatingName,
                 },
             }).unwrap();
-
 
             if (result.error) {
                 toast.error(result.error);
@@ -72,7 +70,6 @@ const CategoryList = () => {
             }
         } catch (error) {
             console.error(error);
-            toast.error("An error occurred while updating the category");
         }
     };
 
@@ -83,15 +80,13 @@ const CategoryList = () => {
             if (result.error) {
                 toast.error(result.error);
             } else {
-                // Use selectedCategory.name directly for the success message
-                const successMessage = selectedCategory.name ? `${selectedCategory.name} is deleted.` : "Category is deleted.";
-                toast.success(successMessage);
+                toast.success(`${result.name} is deleted.`);
                 setSelectedCategory(null);
                 setModalVisible(false);
             }
         } catch (error) {
             console.error(error);
-            toast.error("Category deletion failed. Try again.");
+            toast.error("Category delection failed. Tray again.");
         }
     };
 
