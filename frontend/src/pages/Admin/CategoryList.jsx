@@ -3,7 +3,7 @@ import {
     useCreateCategoryMutation,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,
-    useFetchCategoriesQuery,
+    useGetCategoriesQuery,
 } from "../../redux/api/categoryApiSlice";
 
 import { toast } from "react-toastify";
@@ -12,7 +12,7 @@ import Modal from "../../components/Modal";
 // import AdminMenu from "./AdminMenu";
 
 const CategoryList = () => {
-    const { data: categories } = useFetchCategoriesQuery();
+    const { data: categories } = useGetCategoriesQuery();
     const [name, setName] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [updatingName, setUpdatingName] = useState("");
@@ -80,7 +80,7 @@ const CategoryList = () => {
             if (result.error) {
                 toast.error(result.error);
             } else {
-                toast.success(`${result.name} is deleted.`);
+                toast.success(`${selectedCategory.name} is deleted.`);
                 setSelectedCategory(null);
                 setModalVisible(false);
             }
