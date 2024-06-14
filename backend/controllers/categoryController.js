@@ -27,7 +27,6 @@ const createCategory = asyncHandler(async (req, res) => {
 const updateCategory = asyncHandler(async (req, res) => {
     try {
         const { name } = req.body;
-        console.log("name is: ", name)
         const { categoryId } = req.params;
 
         const category = await Category.findOne({ _id: categoryId });
