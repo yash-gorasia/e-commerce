@@ -9,8 +9,6 @@ const addProduct = asyncHandler(async (req, res) => {
         switch (true) {
             case !name:
                 return res.json({ error: "Name is required" });
-            case !brand:
-                return res.json({ error: "Brand is required" });
             case !description:
                 return res.json({ error: "Description is required" });
             case !price:
@@ -19,6 +17,8 @@ const addProduct = asyncHandler(async (req, res) => {
                 return res.json({ error: "Category is required" });
             case !quantity:
                 return res.json({ error: "Quantity is required" });
+            case !brand:
+                return res.json({ error: "Brand is required" });
         }
 
         const product = new Product({ ...req.fields });
@@ -79,6 +79,11 @@ const fetchProducts = asyncHandler(async (req, res) => {
     try {
         const pageSize = 6;
 
+        // The function checks if there is a keyword query parameter in the request.
+        // If a keyword is provided, it constructs a MongoDB query object to search for products whose name field matches the keyword,
+        // using a case -insensitive regular expression($regex with $options: "i").
+        // If no keyword is provided, it sets keyword to an empty object, meaning no filtering will be applied.
+
         const keyword = req.query.keyword
             ? {
                 name: {
@@ -137,6 +142,8 @@ const addProductReview = asyncHandler(async (req, res) => {
         const { rating, comment } = req.body;
         const product = await Product.findById(req.params.id);
 
+        // reviewSchema is a subdocument of productSchema, so we can access it directly from the product object.
+        // hence we are getting user from the product object.
         if (product) {
             const alreadyReviewed = product.reviews.find(
                 (r) => r.user.toString() === req.user._id.toString()
@@ -158,6 +165,8 @@ const addProductReview = asyncHandler(async (req, res) => {
 
             product.numReviews = product.reviews.length;
 
+            // acc is the accumulator that holds the sum of ratings as the reduce function iterates through the array.
+            // item represents the current review object in the iteration.
             product.rating =
                 product.reviews.reduce((acc, item) => item.rating + acc, 0) /
                 product.reviews.length;
