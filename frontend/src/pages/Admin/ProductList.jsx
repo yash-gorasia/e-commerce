@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   useCreateProductMutation,
@@ -23,6 +23,12 @@ const ProductList = () => {
   const [uploadProductImage] = useUploadProductImageMutation();
   const [createProduct] = useCreateProductMutation();
   const { data: categories } = useGetCategoriesQuery();
+ 
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      setCategory(categories[0]._id); // Set the initial category to the first item in the categories array
+    }
+  }, [categories]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +43,8 @@ const ProductList = () => {
       productData.append("quantity", quantity);
       productData.append("brand", brand);
       productData.append("countInStock", stock);
+      
+      console.log("product data is: ",productData);
 
       const { data } = await createProduct(productData);
 
@@ -166,7 +174,11 @@ const ProductList = () => {
                   placeholder="Choose Category"
                   className="p-4 mb-3 w-[30rem] border rounded-lg bg-[white] text-black"
                   onChange={(e) => setCategory(e.target.value)}
+                  value={category}
+                  // Ensure the select value is maintained
+                  // refer line number 27
                 >
+
                   {categories?.map((c) => (
                     <option key={c._id} value={c._id}>
                       {c.name}
