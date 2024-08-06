@@ -47,6 +47,8 @@ const AdminProductUpdate = () => {
   const uploadFileHandler = async (e) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
+    formData.append("currentImagePath", image); // Send the current image path for deletion
+
     try {
       const res = await uploadProductImage(formData).unwrap();
       toast.success("Item added successfully");
@@ -59,9 +61,11 @@ const AdminProductUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("image is:", productData.image);
     try {
       const formData = new FormData();
       formData.append("image", image);
+      formData.append("CurrentImagePath", productData.image);
       formData.append("name", name);
       formData.append("description", description);
       formData.append("price", price);
